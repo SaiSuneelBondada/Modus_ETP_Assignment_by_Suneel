@@ -1,0 +1,107 @@
+# Modus ETP Technical Assignment – Azure DevOps Engineer Role
+By: Naga Veera Venu Sai Suneel Bondada 🎓 
+________________________________________
+🔷 1. Architecture Overview
+📌 Key Azure Components
+Layer	Component	Purpose
+Network Frontend	Azure Application Gateway + WAF	Load balancing, SSL termination, security
+Compute	Azure Kubernetes Service (AKS)	Host containerized web service
+Routing & TLS	NGINX Ingress Controller + cert-manager	URL routing and Let's Encrypt TLS
+Data	Azure SQL Database (Premium Tier)	Store transactional and user data
+Secret Management	Azure Key Vault / K8s Secrets	Store credentials and sensitive config
+External APIs	Azure API Management	Secure and throttle third-party integrations
+Monitoring	Prometheus + Grafana	Resource and application monitoring
+CI/CD	Azure DevOps Pipelines	Automation of build, test, and deploy
+________________________________________
+🏗️ 2. Infrastructure Design
+Azure Resources Used
+•	AKS Cluster:
+o	Minimum 3 nodes (auto-scaling enabled)
+o	Private cluster access (optional, for secure environments)
+•	Azure SQL DB: Premium tier with geo-redundancy
+•	Application Gateway: Routes HTTPS traffic to Ingress
+•	Public IP + DNS: For accessing the service (e.g., webapp.example.com)
+•	Azure Key Vault: For secure secrets, API keys, DB creds
+•	Azure Monitor & Log Analytics Workspace: Observability
+•	Azure Container Registry: Store Docker images securely
+•	Virtual Network (VNet): With subnets for AKS, SQL, Gateway
+________________________________________
+🌐 3. Network Route (End-to-End)
+sequenceDiagram
+    participant User
+    participant AppGW as Azure Application Gateway (with WAF)
+    participant Ingress as NGINX Ingress Controller
+    participant WebApp as Web Service Pod
+    participant SQL as Azure SQL DB
+    participant API as External Services (via Azure API Mgmt)
+
+    User->>AppGW: HTTPS Request (webapp.example.com)
+    AppGW->>Ingress: Forward via Internal Load Balancer
+    Ingress->>WebApp: Route to web service pod
+    WebApp->>SQL: Read/Write Data (via Private Link)
+    WebApp->>API: Fetch Data (via Azure API Management)
+________________________________________
+🧰 4. Kubernetes Configurations
+________________________________________
+🔄 5. CI/CD (Azure DevOps Pipelines)
+CI Pipeline – Triggers on code push
+•	Checkout code
+•	Run tests (unit, Selenium if needed)
+•	Lint & scan via SonarQube
+•	Build Docker image
+•	Push to ACR
+CD Pipeline – Triggers on successful build
+•	Pull manifests from Git repo
+•	Authenticate to AKS
+•	kubectl apply -f all YAMLs
+•	Deploy TLS certs via cert-manager
+•	Rollout with Blue-Green or Canary strategy
+________________________________________
+🔐 6. Security
+•	HTTPS via Let's Encrypt + cert-manager
+•	Azure Key Vault for sensitive variables
+•	Azure RBAC for AKS access
+•	Private endpoint for Azure SQL DB
+•	WAF + API Management for external integrations
+________________________________________
+📊 7. Monitoring & Alerts
+•	Helm Install:
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm install monitoring prometheus-community/kube-prometheus-stack
+•	Dashboards: CPU, Memory, RPS, SQL DB usage
+•	Alerts: Slack/Teams or Email using AlertManager
+________________________________________
+⚡ 8. Integration with External Services
+For integrating external services such as third-party APIs (payment services, email providers, etc.), the solution uses Azure API Management (APIM). This approach allows us to:
+•	Throttle requests to prevent abuse
+•	Securely manage API keys using Azure Key Vault
+•	Monitor traffic and create usage plans
+•	Provide a unified API gateway for external integrations
+Key Points:
+•	API Key management: APIM and Key Vault ensure that API keys and secrets are stored securely.
+•	Rate limiting: Set up quotas and rate limits to manage traffic and avoid service overloading.
+•	Logging and monitoring: Azure Monitor provides observability on external API calls and helps ensure seamless integrations.
+________________________________________
+💥 9. High Availability & Fault Tolerance
+To ensure high availability and fault tolerance, the system leverages the following:
+1. AKS Cluster (3+ nodes, auto-scaling)
+•	Node Pool Auto-scaling: Scales nodes dynamically based on load.
+•	Pod Distribution: Pods are distributed across multiple nodes and availability zones to ensure redundancy.
+2. SQL Database High Availability
+•	Geo-replication: SQL database is configured for geo-redundancy, ensuring disaster recovery in case of regional failures.
+•	Auto-failover: In case of a failure, Azure SQL automatically fails over to a secondary region.
+3. Ingress Controller & Load Balancing
+•	NGINX Ingress ensures traffic is distributed evenly across pods.
+•	Azure Application Gateway ensures secure traffic routing to AKS and performs SSL termination.
+4. Application Gateway with WAF
+•	Web Application Firewall (WAF) protects against DDoS and other external threats.
+•	Global Load Balancing: Routes traffic intelligently to ensure minimal latency and high availability.
+5. Backup & Disaster Recovery
+•	Database Backups: SQL database backups are taken at regular intervals, with automated recovery.
+•	Pod Redundancy: Multiple replicas ensure that service continues even if one pod or node fails.
+________________________________________
+✅ Summary
+This solution ensures a highly available, secure, scalable, and fault-tolerant web service infrastructure using Azure's native tools and best practices. It also provides a clear path for integrating external services and ensures that the system can handle failures gracefully with high availability strategies.
+Let me know if you'd like to:
+•	Generate a PDF version of this document for submission
+•	Include an architecture diagram (SVG or PNG)
