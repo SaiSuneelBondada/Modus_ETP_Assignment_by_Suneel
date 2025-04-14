@@ -3,7 +3,7 @@
 
 ---
 
-## 🔷 1. Architecture Overview
+## 🏛️ 1. Architecture Overview
 **The goal is to design a secure, scalable, and fault-tolerant web service infrastructure that handles:**
 - Approximately 1000 requests per second (RPS).
 - SQL database connectivity.
@@ -12,16 +12,17 @@
 
 ### 📌 Key Azure Components
 
-| Layer               | Component                                          | Purpose                                                   |
-|---------------------|----------------------------------------------------|-----------------------------------------------------------|
-| Network Frontend    | Azure Application Gateway + WAF                   | Load balancing, SSL termination, security                 |
-| Compute             | Azure Kubernetes Service (AKS)                    | Host containerized web service                            |
-| Routing & TLS       | NGINX Ingress Controller + cert-manager           | URL routing and Let's Encrypt TLS                         |
-| Data                | Azure SQL Database (Premium Tier)                 | Store transactional and user data                         |
-| Secret Management   | Azure Key Vault / K8s Secrets                     | Store credentials and sensitive config                    |
-| External APIs       | Azure API Management                              | Secure and throttle third-party integrations              |
-| Monitoring          | Prometheus + Grafana                              | Resource and application monitoring                       |
-| CI/CD               | Azure DevOps Pipelines                            | Automation of build, test, and deploy                     |
+| Layer(s)                 | Component                 | Purpose                                            |
+|--------------------------|---------------------------|----------------------------------------------------|
+| Application, Orchestration | Azure Kubernetes Service (AKS) | Hosts and manages containerized applications.      |
+| Container Registry       | Azure Container Registry  | Stores and manages Docker container images.        |
+| Data                     | Azure SQL Database        | Provides persistent storage for application data. |
+| Azure Application Gateway| Ingress controller        | TLS termination, and advanced routing. |
+| Certifications           | Cert-manager              | Automates issuing and renewing SSL/TLS certificates. |
+| Security                 | Azure Key Vault           | Securely stores and manages secrets, including certificates and database credentials. |
+| Monitoring               | Azure Monitor             | Collects and analyzes logs, metrics, and provides alerting capabilities. |
+| Deployment Automation    | Azure DevOps              | Enables Continuous Integration and Continuous Delivery (CI/CD) pipelines. |
+
 
 ---
 
@@ -53,17 +54,22 @@
   - Stores Docker images securely  
 
 - **Virtual Network (VNet)**  
-  - With subnets for AKS, SQL, Gateway  
+  - With subnets for AKS, SQL, Gateway
+
+**YAML Configs:**
+- deployment.yaml – Web service deployment
+- service.yaml – Kubernetes service
+- ingress.yaml – Ingress + TLS
+- cert-issuer.yaml – ClusterIssuer for cert-manager
+- secrets.yaml – Store DB connection + API keys
+- azure-pipelines.yml
 
 ------
 
-## 🔄 4. CI/CD (Azure DevOps Pipelines)
+## 🔄 3. CI/CD (Azure DevOps Pipelines)
 
 ### **CI Pipeline** – Triggers on code push
 
-- Checkout code  
-- Run tests (unit, Selenium if needed)  
-- Lint & scan via SonarQube  
 - Build Docker image  
 - Push to Azure Container Registry (ACR)  
 
@@ -71,53 +77,27 @@
 
 - Pull manifests from Git repo  
 - Authenticate to AKS  
-- Apply deployments via `kubectl apply -f`  
-- TLS via cert-manager  
-- Rollout with **Blue-Green** or **Canary** strategy  
+- Apply deployments  
 
 ---
 
-## 🔐 5. Security
+## 🔐 4. Security
 
-- HTTPS via Let's Encrypt + cert-manager  
-- Azure Key Vault for sensitive variables  
-- Azure RBAC for AKS access control  
-- Private endpoint for Azure SQL DB  
-- WAF + API Management for external integrations  
-
----
-
-## 📊 6. Monitoring & Alerts
-
-Prometheus and Grafana are used for observability, deployed via Helm charts.  
-
-**Dashboards Include:**
-- CPU and memory utilization
-- Requests per second (RPS)
-- Pod availability and health
-- Azure SQL Database performance
-
-**Alerting:**
-- Integrated with Slack, Teams, or Email via AlertManager
-- Custom thresholds for latency, error rates, and availability
-- Alerts for failures in external service integrations
+- ✅ WAF enabled on Application Gateway
+- ✅ Secrets Management via Kubernetes Secrets / Azure Key Vault
+- ✅ Private networking for SQL via Service Endpoints (if desired)
+- ✅ RBAC and Azure AD for access control
+- ✅ Image Security with Azure Defender for Containers
 
 ---
 
 ## ⚡ 7. Integration with External Services
 
-External services such as payment APIs or third-party data sources are integrated using Azure API Management (APIM).  
+External APIs (e.g., payment, logistics, etc.) are integrated within the web service codebase securely using:
 
-**Key Features:**
-- Secure access via API keys stored in Azure Key Vault
-- Rate limiting and throttling to prevent abuse
-- Centralized API gateway for monitoring and analytics
-- Retry logic and circuit breakers built into application logic
-
-**Benefits:**
-- Secured, observable, and reliable communication with external systems
-- Simplified API versioning and traffic control
-- Scalable access to high-volume third-party services
+- API keys stored in Kubernetes Secrets or Azure Key Vault
+- All outbound traffic handled from AKS Pod with firewall rules
+- Resilience ensured using retry logic, circuit breakers, or API gateways (optional)
 
 ---
 
@@ -137,11 +117,6 @@ This architecture ensures uninterrupted service and quick recovery in case of fa
 - Azure Application Gateway with WAF for secure traffic routing
 - NGINX Ingress for path-based routing and load balancing
 
-**Resiliency Practices:**
-- Pod self-healing with AKS
-- GitOps-style rollbacks for fast recovery
-- Multi-region architecture for business continuity
-
 ---
 
 ## ✅ Summary
@@ -150,7 +125,6 @@ This solution delivers a **secure**, **highly available**, **scalable**, and **f
 
 It supports up to **1000 requests per second**, integrates external services efficiently, and is built with continuous delivery and monitoring in mind.  
 
-The architecture leverages services like **Azure Kubernetes Service**, **Azure DevOps**, **Ingress**, **cert-manager**, **Azure SQL**, **Azure API Management**, **Prometheus**, and **Grafana** to deliver reliable and efficient operations.
 
 
 
@@ -192,11 +166,6 @@ This section explains the full path a request takes — from an external user ac
    - The backend pod processes the request and returns the response.
    - The response follows the same route in reverse, back to the user over HTTPS.
 
-
----
-
-
-### 🌐 Network Route (End-to-End)
 
 ```mermaid
 sequenceDiagram
