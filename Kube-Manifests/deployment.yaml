@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: web-container
-          image: <your-acr>.azurecr.io/web-service:latest
+          image: <ModusETP-acr>.azurecr.io/web-service:latest
           ports:
             - containerPort: 80
           env:
