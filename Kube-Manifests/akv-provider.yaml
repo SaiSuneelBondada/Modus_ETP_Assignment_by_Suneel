@@ -1,0 +1,20 @@
+apiVersion: secrets-store.csi.x-k8s.io/v1
+kind: SecretProviderClass
+metadata:
+  name: azure-keyvault
+spec:
+  provider: azure
+  parameters:
+    usePodIdentity: "true" # Or use userAssignedIdentityID: "<your-user-assigned-identity-resource-id>"
+    keyvaultName: "your-key-vault-name" # Replace with your Key Vault name
+    objects: |
+      - objectName: db-hostname
+        objectType: secret
+      - objectName: db-port
+        objectType: secret
+      - objectName: db-name
+        objectType: secret
+      - objectName: db-username
+        objectType: secret
+      - objectName: db-password
+        objectType: secret
