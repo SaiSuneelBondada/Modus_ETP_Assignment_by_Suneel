@@ -1,0 +1,42 @@
+trigger:
+  branches:
+    include:
+      - main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  imageName: web-service
+
+stages:
+  - stage: Build
+    jobs:
+      - job: BuildImage
+        steps:
+          - task: Docker@2
+            inputs:
+              containerRegistry: '<Your ACR service connection>'
+              repository: '$(imageName)'
+              command: 'buildAndPush'
+              Dockerfile: '**/Dockerfile'
+              tags: |
+                latest
+
+  - stage: Deploy
+    jobs:
+      - job: DeployToAKS
+        steps:
+          - task: Kubernetes@1
+            inputs:
+              connectionType: 'Azure Resource Manager'
+              azureSubscription: '<Your Azure subscription>'
+              azureResourceGroup: '<Your Resource Group>'
+              kubernetesCluster: '<Your AKS Name>'
+              namespace: 'default'
+              command: apply
+              useConfigurationFile: true
+              configuration: |
+                deployment.yaml
+                service.yaml
+                ingress.yaml
