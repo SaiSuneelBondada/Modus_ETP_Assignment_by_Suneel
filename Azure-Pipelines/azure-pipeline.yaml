@@ -38,5 +38,5 @@ stages:
               useConfigurationFile: true
               configuration: |
                 ../Kube-Manifests/deployment.yaml
-                ../Kube-Manifests/service.yaml
+                ../Kube-Manifests/service-webapp.yaml
                 ../Kube-Manifests/ingress.yaml
