@@ -12,6 +12,10 @@ spec:
       labels:
         app: web
     spec:
+      initContainers:
+        - name: database-ready-check
+          image: busybox:1.31
+          command: ['sh', '-c', 'echo -e "Waiting for the MySQL database to become available..."; while ! nc -z mysql-service 3306; do sleep 2; printf "."; done; echo -e "\n>> MySQL database is now ready.";']
       containers:
         - name: web-container
           image: <ModusETP-acr>.azurecr.io/web-service:latest
