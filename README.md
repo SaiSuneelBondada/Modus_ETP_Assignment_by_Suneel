@@ -84,7 +84,7 @@
 ## 🔐 4. Security
 
 - ✅ WAF enabled on Application Gateway
-- ✅ Secrets Management via Kubernetes Secrets / Azure Key Vault
+- ✅ Secrets Management via Kubernetes Secrets / Azure Key Vault (AKV)
 - ✅ Private networking for SQL via Service Endpoints (if desired)
 - ✅ RBAC and Azure AD for access control
 - ✅ Image Security with Azure Defender for Containers
@@ -121,7 +121,8 @@ This architecture ensures uninterrupted service and quick recovery in case of fa
 
 ## 🗒 7. Assumptions
 
-- AKS cluster exists and ready to use.
+- AKS cluster exists and is ready to use
+- AKS has permissions to use the AKV
 
 ---
 
