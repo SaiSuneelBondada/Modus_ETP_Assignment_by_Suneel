@@ -5,7 +5,7 @@ metadata:
 spec:
   provider: azure
   parameters:
-    usePodIdentity: "true" # Or use userAssignedIdentityID: "<your-user-assigned-identity-resource-id>"
+    userAssignedIdentityID: <your-user-assigned-identity-resource-id>
     keyvaultName: "your-key-vault-name" # Replace with your Key Vault name
     objects: |
       - objectName: db-hostname
