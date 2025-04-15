@@ -1,0 +1,7 @@
+{
+  "tenantId": "<modusetp_TENANT_ID>",
+  "subscriptionId": "<modusetp_AZURE_SUBSCRIPTION_ID>",
+  "clientId": "<modusetp_SERVICE_PRINCIPAL_APP_ID>",
+  "clientSecret": "<modusetp_SERVICE_PRINCIPAL_PASSWORD>",
+  "resourceGroup": "<modusetp_DNS_RESOURCE_GROUP_NAME>"
+}
