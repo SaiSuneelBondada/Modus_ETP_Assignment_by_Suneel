@@ -37,6 +37,6 @@ stages:
               command: apply
               useConfigurationFile: true
               configuration: |
-                deployment.yaml
-                service.yaml
-                ingress.yaml
+                ../Kube-Manifests/deployment.yaml
+                ../Kube-Manifests/service.yaml
+                ../Kube-Manifests/ingress.yaml
