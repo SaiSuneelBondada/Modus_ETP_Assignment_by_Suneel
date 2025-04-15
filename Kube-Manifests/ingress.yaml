@@ -8,10 +8,10 @@ metadata:
 spec:
   tls:
     - hosts:
-        - yourdomain.com
+        - modusetpdomain.com
       secretName: tls-secret
   rules:
-    - host: yourdomain.com
+    - host: modusetpdomain.com
       http:
         paths:
           - path: /
