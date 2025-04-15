@@ -91,7 +91,7 @@
 
 ---
 
-## ⚡ 7. Integration with External Services
+## ⚡ 5. Integration with External Services
 
 External APIs (e.g., payment, logistics, etc.) are integrated within the web service codebase securely using:
 
@@ -101,7 +101,7 @@ External APIs (e.g., payment, logistics, etc.) are integrated within the web ser
 
 ---
 
-## 💥 8. High Availability & Fault Tolerance
+## 💥 6. High Availability & Fault Tolerance
 
 This architecture ensures uninterrupted service and quick recovery in case of failures.
 
@@ -116,6 +116,12 @@ This architecture ensures uninterrupted service and quick recovery in case of fa
 **Routing & Networking:**
 - Azure Application Gateway with WAF for secure traffic routing
 - NGINX Ingress for path-based routing and load balancing
+
+---
+
+## 🗒 7. High Availability & Fault Tolerance
+
+- AKS cluster exists and ready to use.
 
 ---
 
