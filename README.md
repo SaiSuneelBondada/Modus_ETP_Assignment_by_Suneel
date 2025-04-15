@@ -119,7 +119,7 @@ This architecture ensures uninterrupted service and quick recovery in case of fa
 
 ---
 
-## 🗒 7. High Availability & Fault Tolerance
+## 🗒 7. Assumptions
 
 - AKS cluster exists and ready to use.
 
