@@ -141,6 +141,9 @@ This section explains the full path a request takes — from an external user ac
 
 ### 🔁 Flow Overview:
 
+![image](https://github.com/user-attachments/assets/c8d92f23-43fd-44e3-bbd4-7dd298ea964a)
+
+
 1. **User Access via HTTPS**  
    The user accesses the application using a custom domain over HTTPS, e.g.:  
    `https://myapp.example.com`
@@ -172,7 +175,3 @@ This section explains the full path a request takes — from an external user ac
 8. **Response Delivery**  
    - The backend pod processes the request and returns the response.
    - The response follows the same route in reverse, back to the user over HTTPS.
-
-
-![image](https://github.com/user-attachments/assets/7a3c48da-0928-4d89-ab8e-05d35726c96e)
-
