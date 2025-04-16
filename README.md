@@ -126,15 +126,6 @@ This architecture ensures uninterrupted service and quick recovery in case of fa
 
 ---
 
-## ✅ Summary
-
-This solution delivers a **secure**, **highly available**, **scalable**, and **fault-tolerant** infrastructure using Microsoft Azure and modern DevOps tools.  
-
-It supports up to **1000 requests per second**, integrates external services efficiently, and is built with continuous delivery and monitoring in mind.  
-
-
-
-
 ## 🌐 Network Route from End User to Webservice
 
 This section explains the full path a request takes — from an external user accessing the application, all the way to the backend service deployed inside Azure Kubernetes Service (AKS).
