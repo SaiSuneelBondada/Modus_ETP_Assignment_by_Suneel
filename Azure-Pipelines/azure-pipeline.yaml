@@ -1,3 +1,4 @@
+
 trigger:
   branches:
     include:
@@ -36,7 +37,10 @@ stages:
               namespace: 'default'
               command: apply
               useConfigurationFile: true
-              configuration: |
-                ../Kube-Manifests/deployment.yaml
-                ../Kube-Manifests/service-webapp.yaml
+              configuration: 
+                ../Kube-Manifests/01-MySQL-ExternalName-Service.yaml
+                ../Kube-Manifests/02-akv-provider.yaml
+                ../Kube-Manifests/03-webapp-deployment.yaml
+                ../Kube-Manifests/04-webapp-service.yaml
                 ../Kube-Manifests/ingress.yaml
+                ../Kube-Manifests/externalDNS.yaml
