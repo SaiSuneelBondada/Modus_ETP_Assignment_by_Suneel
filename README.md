@@ -137,7 +137,7 @@ This section explains the full path a request takes — from an external user ac
 
 1. **User Access via HTTPS**  
    The user accesses the application using a custom domain over HTTPS, e.g.:  
-   `https://myapp.example.com`
+   `https://modusetpdomain.com`
 
 2. **DNS Resolution**  
    - The domain is registered in Azure DNS Zones.
