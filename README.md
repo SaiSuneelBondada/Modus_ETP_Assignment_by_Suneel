@@ -39,7 +39,6 @@
 
 - **Application Gateway**  
   - Routes HTTPS traffic to Ingress  
-  - WAF enabled for security  
 
 - **Public IP + DNS**  
   - For accessing the service (e.g., `webapp.example.com`)  
@@ -57,11 +56,14 @@
   - With subnets for AKS, SQL, Gateway
 
 **YAML Configs:**
-- deployment.yaml – Web service deployment
-- service.yaml – Kubernetes service
-- ingress.yaml – Ingress + TLS
-- cert-issuer.yaml – ClusterIssuer for cert-manager
-- secrets.yaml – Store DB connection + API keys
+- 01-MySQL-ExternalName    
+- 02-akv-provider.yaml
+- 03-webapp-deployment.yaml
+- 04-webapp-service.yaml
+- externalDNS.yaml
+- ingress.yaml
+- cert-issuer.yaml
+- secrets.yaml 
 - azure-pipelines.yml
 
 ------
@@ -83,7 +85,6 @@
 
 ## 🔐 4. Security
 
-- ✅ WAF enabled on Application Gateway
 - ✅ Secrets Management via Kubernetes Secrets / Azure Key Vault (AKV)
 - ✅ Private networking for SQL via Service Endpoints (if desired)
 - ✅ RBAC and Azure AD for access control
@@ -123,6 +124,7 @@ This architecture ensures uninterrupted service and quick recovery in case of fa
 
 - AKS cluster exists and is ready to use
 - AKS has permissions to use the AKV
+- DB is hosted outside this AKS cluster and is connected to this cluster using external service
 
 ---
 
@@ -157,11 +159,12 @@ This section explains the full path a request takes — from an external user ac
 
 6. **Application Pod Resolution**  
    - The **Kubernetes Service** (ClusterIP) directs the request to one of the healthy application pods.
-   - Each pod is deployed via Helm and runs the containerized web application.
+   - Each pod is deployed and runs the containerized web application.
 
 7. **External Service Communication**  
    - The application may call **external APIs** (e.g., payments, notifications) via secure endpoints.
    - Authentication credentials are managed via **Azure Key Vault**.
+   - Used to communicate with the Azure DB for MySQL that was existing earlier
 
 8. **Response Delivery**  
    - The backend pod processes the request and returns the response.
