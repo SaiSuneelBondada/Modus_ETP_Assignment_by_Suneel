@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-service
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: web
+  template:
+    metadata:
+      labels:
+        app: web
+    spec:
+      initContainers:
+        - name: database-ready-check
+          image: busybox:1.31
+          command: ['sh', '-c', 'echo -e "Waiting for the MySQL database to become available..."; while ! nc -z mysql-service 3306; do sleep 2; printf "."; done; echo -e "\n>> MySQL database is now ready.";']
+      containers:
+        - name: web-container
+          image: <ModusETP-acr>.azurecr.io/web-service:latest
+          ports:
+            - containerPort: 80
+          env:
+            - name: DB_HOSTNAME
+              valueFrom:
+                secretKeyRef:
+                  name: akv-secret # The name of the Kubernetes Secret created by the CSI driver
+                  key: db-hostname
+            - name: DB_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: akv-secret
+                  key: db-port
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: akv-secret
+                  key: db-name
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: akv-secret
+                  key: db-username
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: akv-secret
+                  key: db-password
+            - name: EXTERNAL_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: api-secrets
+                  key: ext-api-key

@@ -1,0 +1,46 @@
+
+trigger:
+  branches:
+    include:
+      - main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  imageName: web-service
+
+stages:
+  - stage: Build
+    jobs:
+      - job: BuildImage
+        steps:
+          - task: Docker@2
+            inputs:
+              containerRegistry: '<Your ACR service connection>'
+              repository: '$(imageName)'
+              command: 'buildAndPush'
+              Dockerfile: '**/Dockerfile'
+              tags: |
+                latest
+
+  - stage: Deploy
+    jobs:
+      - job: DeployToAKS
+        steps:
+          - task: Kubernetes@1
+            inputs:
+              connectionType: 'Azure Resource Manager'
+              azureSubscription: '<Your Azure subscription>'
+              azureResourceGroup: '<Your Resource Group>'
+              kubernetesCluster: '<Your AKS Name>'
+              namespace: 'default'
+              command: apply
+              useConfigurationFile: true
+              configuration: 
+                ../Kube-Manifests/01-MySQL-ExternalName-Service.yaml
+                ../Kube-Manifests/02-akv-provider.yaml
+                ../Kube-Manifests/03-webapp-deployment.yaml
+                ../Kube-Manifests/04-webapp-service.yaml
+                ../Kube-Manifests/ingress.yaml
+                ../Kube-Manifests/externalDNS.yaml
