@@ -12,6 +12,8 @@
 
 ### 📌 Key Azure Components
 
+![image](https://github.com/user-attachments/assets/c8d92f23-43fd-44e3-bbd4-7dd298ea964a)
+
 | Layer(s)                 | Component                 | Purpose                                            |
 |--------------------------|---------------------------|----------------------------------------------------|
 | Application, Orchestration | Azure Kubernetes Service (AKS) | Hosts and manages containerized applications.      |
@@ -133,9 +135,6 @@ This architecture ensures uninterrupted service and quick recovery in case of fa
 This section explains the full path a request takes — from an external user accessing the application, all the way to the backend service deployed inside Azure Kubernetes Service (AKS).
 
 ### 🔁 Flow Overview:
-
-![image](https://github.com/user-attachments/assets/c8d92f23-43fd-44e3-bbd4-7dd298ea964a)
-
 
 1. **User Access via HTTPS**  
    The user accesses the application using a custom domain over HTTPS, e.g.:  
